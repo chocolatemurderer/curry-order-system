@@ -9,16 +9,18 @@
 </head>
 <body class="lift:content_id=real_content">
   <div class="lift:surround?with=default;at=content" id="real_content">
-    <h2>Curry Order</h2>
+    <h2>Your Curry Order</h2>
 
     <form action="/order" name="Order" class="lift:snippet?type=OrderSnippet.order">
-        <span>Dish:</span>
+        <span>Main:</span>
         <select name="food" class="dish">
             <option>Butter Chicken</option>                                     
         </select>
         <select name="Hotness" class="hotness">
             <option>Very Mild</option>
         </select>
+        <span>$10</span>
+        <p>All mains and served with basmati rice and naan bread</p>
         <hr/>
 
         <h4>About this dish</h4>
@@ -39,11 +41,10 @@
                 </td>
             </tr>
         </table>
-        <br/>
 
         <input name="Order" value="order" class="sendOrder" type="submit"/>
-        <br/>
     </form>
+    <hr class="space"/>
 </div>
 
 </body>
