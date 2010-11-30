@@ -6,16 +6,15 @@ import _root_.net.liftweb.mapper._
 import _root_.net.liftweb.util._
 import _root_.net.liftweb.common._
 
-class User extends LongKeyedMapper[User] with IdPK{
-  def getSingleton=User
-  object realName extends MappedString(this, 64)
-  object email extends MappedEmail(this, 64) {
-    override def apply(s: String) = super.apply(s.toLowerCase)
-    override def apply(b: Box[String]) = super.apply(b map { _.toLowerCase })
-    override def validations = valUnique(S.??("unique.email.address")) _ :: super.validations // Doesn't seem to work.
-  }
+class User extends MegaProtoUser[User] {
+  def getSingleton = User
+  def realName = shortName
+}
 
-}  
-
-object User extends User with LongKeyedMetaMapper[User] {
+object User extends User with MetaMegaProtoUser[User] {
+  override def dbTableName = "users"
+  override def screenWrap = Full(<lift:surround with="default" at="content">
+                                <lift:bind /></lift:surround>)
+   override def fieldOrder = List(id, firstName, lastName, email, locale, timezone, password)
+   //override def skipEmailValidation = true
 }

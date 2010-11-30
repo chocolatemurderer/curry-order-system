@@ -11,7 +11,7 @@ import net.liftweb.http.{S, RequestVar, TemplateFinder, SHtml}
 import net.liftweb.mapper.Descending
 
 class CurrentOrders {
-  val orders = Order.findAll(Order(Order.heat, Descending)) 
+  val orders = Order.findAll() 
 
   def list = ".order" #> rows & ClearClearable
 //  def order: (NodeSeq => NodeSeq) = ".orders" #>  & ClearClearable

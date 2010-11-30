@@ -39,18 +39,14 @@ class Boot {
     // where to search snippet
     LiftRules.addToPackages("code")
 
+    val loggedIn = If(() => User.loggedIn_?, () => RedirectResponse("/"))
+
     // Build SiteMap
     val entries = List(
-      Menu.i("Home") / "index", // the simple way to declare a menu
-      Menu.i("Order") / "order", // the simple way to declare a menu
-      Menu.i("Orders") / "currentorder", // the simple way to declare a menu
-
-      // more complex because this menu allows anything in the
-      // /static path to be visible
-      Menu(Loc("Static", Link(List("static"), true, "/static/index"), 
-	       "Static Content"))) 
-    // the User management menu items
-    // User.sitemap
+      Menu.i("Home") / "index",
+      Menu.i("Orders") / "currentorder",
+      Menu.i("Place Order") / "order" >> loggedIn
+    ) ::: User.sitemap
 
     // set the sitemap.  Note if you don't want access control for
     // each page, just comment this line out.
@@ -68,7 +64,7 @@ class Boot {
     LiftRules.early.append(_.setCharacterEncoding("UTF-8"))
 
     // What is the function to test if a user is logged in?
-    // LiftRules.loggedInTest = Full(() => User.loggedIn_?)
+    LiftRules.loggedInTest = Full(() => User.loggedIn_?)
 
     // Make a transaction span the whole HTTP request
     S.addAround(DB.buildLoanWrapper)
