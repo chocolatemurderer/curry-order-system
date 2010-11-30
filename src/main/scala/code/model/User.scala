@@ -16,5 +16,5 @@ object User extends User with MetaMegaProtoUser[User] {
   override def screenWrap = Full(<lift:surround with="default" at="content">
                                 <lift:bind /></lift:surround>)
    override def fieldOrder = List(id, firstName, lastName, email, locale, timezone, password)
-   //override def skipEmailValidation = true
+   override def skipEmailValidation = true
 }

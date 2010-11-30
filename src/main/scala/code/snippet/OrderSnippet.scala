@@ -6,8 +6,8 @@ import Helpers._
 import net.liftweb.http.js.{JsCmd, JsCmds}
 import xml.NodeSeq
 import net.liftweb.http.js.JsCmds.Replace
-import code.model.{Order, Curry, Heat}
 import net.liftweb.http.{S, RequestVar, TemplateFinder, SHtml}
+import code.model.{User, Order, Curry, Heat}
 
 class OrderSnippet {
   val curryList = Curry.findAll()
@@ -36,7 +36,7 @@ class OrderSnippet {
   def processOrder(): JsCmd = {
     val order: Order = Order.create
     order.timeStamp(new java.util.Date())
-    order.user(Empty)
+    order.user(User.currentUser)
     order.curry(dish.is)
     order.heat(heat)
 

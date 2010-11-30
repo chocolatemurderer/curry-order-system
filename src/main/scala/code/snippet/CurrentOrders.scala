@@ -18,7 +18,7 @@ class CurrentOrders {
 
   def rows: (NodeSeq => NodeSeq) = (ns: NodeSeq) => orders.flatMap(row(_).apply(ns))
 
-  def row(o: Order) = ".name *" #> (User.find(By(User.id, o.user.is)).map(_.realName.is) openOr "?") &
+  def row(o: Order) = ".name *" #> (User.find(By(User.id, o.user.is)).map(_.realName) openOr "?") &
           ".curry *" #> (o.curry.obj.map(_.name.is) openOr "?") &
           ".heat *" #> o.heat
 }
