@@ -8,7 +8,7 @@ class Curry extends LongKeyedMapper[Curry] with IdPK{
   def getSingleton=Curry 
   object name extends MappedString(this, 64)
   object description extends MappedText(this)
-  object picUrl extends MappedString(this, 200)
+  object picUrl extends MappedText(this)
 
 }  
 

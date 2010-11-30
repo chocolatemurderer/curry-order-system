@@ -1,27 +1,48 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
 <html>
 <head>
-    <meta content="text/html; charset=ISO-8859-1" http-equiv="content-type">
-    <title>CurryOrder</title></head>
+
+    <meta content="text/html; charset=ISO-8859-1" http-equiv="content-type"/>
+    <title>CurryOrder</title>
+
+
+</head>
 <body class="lift:content_id=real_content">
-<div class="lift:surround?with=default;at=content" id="real_content">Curry Order<br>
+<div class="lift:surround?with=default;at=content" id="real_content">Curry
+    Order<br/>
 
     <form action="/" name="Order" class="lift:snippet?type=OrderSnippet.order">
         <select name="Hotness" class="hotness">
             <option>Very Mild</option>
         </select>
-        <br>
-        <br>
-        <input name="Curry" value="Butter Chicken" type="radio" class="dish">Butter Chicken<br>
-        <input name="Curry" value="Butter Chicken" type="radio" class="clearable">Butter Chicken<br>
-        <input name="Curry" value="Butter Chicken" type="radio" class="clearable">Butter Chicken<br>
-        <input name="Curry" value="Butter Chicken" type="radio" class="clearable">Butter Chicken<br>
-        <input name="Curry" value="Butter Chicken" type="radio" class="clearable">Butter Chicken<br>
-        <input name="Curry" value="Butter Chicken" type="radio" class="clearable">Butter Chicken<br>
-        <br>
-        <br>
-        <input name="Order" value="order" type="submit" class="sendOrder"><br>
+        <br/>
+        <br/>
+        <select name="food" class="dish">
+            <option>Butter Chicken</option>
+        </select>
+        <br/>
+
+        <h4>About this dish</h4>
+
+        <table>
+            <tr>
+                <td>
+                    <img src="http://orders.littleindia.co.nz/media/catalog/product/cache/1/image/340x255/9df78eab33525d08d6e5fb8d27136e95/3/4/34_murg_mumtaz.jpg"
+                         alt="Murg Mumtaz (Butter Chicken)"/>
+                </td>
+                <td>
+                    <h1>Murg Mumtaz (Butter Chicken)</h1>
+                    <p>A world famous Indian delicacy. Also known as butter chicken. Half cooked the tandoori way
+                        and finished the curry way, with crushed cashews, cream and spices.</p>
+                </td>
+            </tr>
+        </table>
+        <br/>
+
+        <input name="Order" value="order" class="sendOrder" type="submit"/>
+        <br/>
     </form>
 </div>
+
 </body>
 </html>

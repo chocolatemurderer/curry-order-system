@@ -11,8 +11,7 @@ class OrderSnippet {
   val curryList = Curry.findAll()
 
   def order = ".hotness" #> SHtml.select(Heat.values.toSeq.map(e => (e.toString, e.toString)), Empty, (s: String) => _) &
-          ".dish" #> SHtml.radio(curryList.map(e => (e.name.is)), Empty, (s: String) => _) &
-          ClearClearable &
+          ".dish" #> SHtml.select(curryList.toSeq.map(e => (e.id.is.toString, e.name.is)), Empty, (s: String) => _) &
           ".sendOrder" #> SHtml.submit("order", () => JsCmds.Noop)
 
 
