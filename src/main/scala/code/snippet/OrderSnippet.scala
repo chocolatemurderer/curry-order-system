@@ -6,8 +6,8 @@ import Helpers._
 import net.liftweb.http.js.{JsCmd, JsCmds}
 import xml.NodeSeq
 import net.liftweb.http.js.JsCmds.Replace
-import net.liftweb.http.{RequestVar, TemplateFinder, SHtml}
 import code.model.{Order, Curry, Heat}
+import net.liftweb.http.{S, RequestVar, TemplateFinder, SHtml}
 
 class OrderSnippet {
   val curryList = Curry.findAll()
@@ -42,7 +42,8 @@ class OrderSnippet {
 
     order.save
 
-    JsCmds.Noop
+    S.notice("Order processed")
+    S.redirectTo("/")
   }
 
   lazy val descriptionPart: NodeSeq = TemplateFinder.findAnyTemplate("order" :: Nil) match {
