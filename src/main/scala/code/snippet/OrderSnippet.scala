@@ -16,22 +16,23 @@ class OrderSnippet {
 
   def order = ".hotness" #> SHtml.select(Heat.values.toSeq.map(e => (e.toString, e.toString)), Empty, (s: String) => heat(Heat.withName(s))) &
           ".dish" #> SHtml.ajaxSelect(curryList.toSeq.map(e => (e.id.is.toString, e.name.is)), Empty, updateDescription _) &
-          ".sendOrder" #> SHtml.submit("order", processOrder _)
+          ".sendOrder" #> SHtml.submit("Submit Order", processOrder _) & description(Curry.findAll.head)
 
 
   def updateDescription(s: String): JsCmd = {
-
     Curry.find(s) match {
       case Full(aCurry) =>
         dish(Full(aCurry))
-        val result = ("#pic [src]" #> aCurry.picUrl &
-                "#pic [alt]" #> aCurry.name &
-                "#desc *" #> aCurry.description &
-                "#curryName *" #> aCurry.name).apply(descriptionPart)
+        val result = description(aCurry).apply(descriptionPart)
         Replace("descriptionTable", result)
       case _ => JsCmds.Noop
     }
   }
+
+  def description(aCurry: Curry) = "#pic [src]" #> aCurry.picUrl &
+                "#pic [alt]" #> aCurry.name &
+                "#desc *" #> aCurry.description &
+                "#curryName *" #> aCurry.name
 
   def processOrder(): JsCmd = {
     val order: Order = Order.create
