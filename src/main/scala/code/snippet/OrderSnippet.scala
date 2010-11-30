@@ -12,27 +12,30 @@ import code.model.{User, Order, Curry, Heat}
 class OrderSnippet {
   val curryList = Curry.findAll()
   object heat extends RequestVar[Heat.Heat](Heat.mildMedium)
-  object dish extends net.liftweb.http.SessionVar[Box[Curry]](Empty)
+  object dish extends net.liftweb.http.SessionVar[Box[Curry]](Full(Curry.findAll.head))
 
-  def order = ".hotness" #> SHtml.select(Heat.values.toSeq.map(e => (e.toString, e.toString)), Empty, (s: String) => heat(Heat.withName(s))) &
-          ".dish" #> SHtml.ajaxSelect(curryList.toSeq.map(e => (e.id.is.toString, e.name.is)), Empty, updateDescription _) &
-          ".sendOrder" #> SHtml.submit("Submit Order", processOrder _) & description(Curry.findAll.head)
+  def order = ".hotness" #> SHtml.select(Heat.values.toSeq.map(e => (e.toString, e.toString)), Full(heat.is.toString), (s: String) => heat(Heat.withName(s))) &
+          ".dish" #> SHtml.ajaxSelect(curryList.toSeq.map(e => (e.id.is.toString, e.name.is)), dish.is.map(_.id.is.toString), updateDescription _) &
+          ".sendOrder" #> SHtml.submit("Submit Order", processOrder _) & description(dish.is)
 
 
   def updateDescription(s: String): JsCmd = {
     Curry.find(s) match {
       case Full(aCurry) =>
         dish(Full(aCurry))
-        val result = description(aCurry).apply(descriptionPart)
+        val result = description(Full(aCurry)).apply(descriptionPart)
         Replace("descriptionTable", result)
       case _ => JsCmds.Noop
     }
   }
 
-  def description(aCurry: Curry) = "#pic [src]" #> aCurry.picUrl &
-                "#pic [alt]" #> aCurry.name &
-                "#desc *" #> aCurry.description &
-                "#curryName *" #> aCurry.name
+  def description(c: Box[Curry]) = c match {
+    case Full(aCurry) => "#pic [src]" #> aCurry.picUrl &
+      "#pic [alt]" #> aCurry.name &
+      "#desc *" #> aCurry.description &
+      "#curryName *" #> aCurry.name
+    case _ => ClearClearable 
+  }
 
   def processOrder(): JsCmd = {
     val order: Order = Order.create
