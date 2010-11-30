@@ -7,8 +7,7 @@ object LoadDB {
     var aCurry: Curry = Curry.create
     aCurry.name("Lamb Vindaloo")
     aCurry.description("A hot dish, made world famous by the Chefs of Goa. It has a Portugese influence. It is cooked with vinegar, capsicum and whole spices.")
-    aCurry.picUrl("http://orders.littleindia.co.nz/media/catalog/product/cache/1/small_image/130x96/9df78eab33525d08d6e5fb8d27136e95/3/3/33_vindaloo.jpg")
-
+    aCurry.picUrl("http://orders.littleindia.co.nz/media/catalog/product/cache/1/image/340x255/9df78eab33525d08d6e5fb8d27136e95/3/3/33_vindaloo.jpg")
     aCurry.save
     aCurry = Curry.create
     aCurry.name("Lamb or Beef Madras")
