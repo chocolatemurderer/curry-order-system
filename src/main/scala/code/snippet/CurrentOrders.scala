@@ -11,7 +11,7 @@ import code.model.{User, Order, Curry, Heat}
 import net.liftweb.mapper.{By, By_>, Descending}
 
 class CurrentOrders {
-  val orders = Order.findAll(By_>(Order.timeStamp, new java.util.Date(new java.util.Date().getTime - (3*24*60*60*1000))))
+  val orders = Order.findCurrent
   
   def list = ".order" #> rows & ClearClearable
 //  def order: (NodeSeq => NodeSeq) = ".orders" #>  & ClearClearable

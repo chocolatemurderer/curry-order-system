@@ -45,7 +45,7 @@ class Boot {
     val entries = List(
       Menu.i("Home") / "index" >> loggedIn,
       Menu.i("Place Order") / "order" >> loggedIn,
-      Menu.i("Current Orders") / "currentorder",
+      Menu.i("Current Orders") / "currentorder" >> Hidden,
       Menu.i("Reset Database") / "resetdb" >> Hidden
     ) ::: User.sitemap
 

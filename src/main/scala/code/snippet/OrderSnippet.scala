@@ -43,11 +43,11 @@ class OrderSnippet {
     order.user(User.currentUser)
     order.curry(dish.is)
     order.heat(heat)
-
     order.save
+    code.comet.OrderServer ! "new"
 
-    S.notice("Order processed")
-    S.redirectTo("/")
+    S.notice("Order accepted")
+    S.redirectTo("/currentorder")
   }
 
   lazy val descriptionPart: NodeSeq = TemplateFinder.findAnyTemplate("order" :: Nil) match {
