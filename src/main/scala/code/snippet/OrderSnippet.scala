@@ -10,12 +10,12 @@ import net.liftweb.http.{S, RequestVar, TemplateFinder, SHtml}
 import code.model.{User, Order, Curry, Heat}
 
 class OrderSnippet {
-  val curryList = Curry.findAll()
+  val curryList = Curry.findAll.filterNot(_.deprecated.is)
   object heat extends RequestVar[Heat.Heat](Heat.mildMedium)
-  object dish extends net.liftweb.http.SessionVar[Box[Curry]](Full(Curry.findAll.head))
+  object dish extends net.liftweb.http.SessionVar[Box[Curry]](Full(curryList.head))
 
   def order = ".hotness" #> SHtml.select(Heat.values.toSeq.map(e => (e.toString, e.toString)), Full(heat.is.toString), (s: String) => heat(Heat.withName(s))) &
-          ".dish" #> SHtml.ajaxSelect(curryList.toSeq.map(e => (e.id.is.toString, e.name.is)), dish.is.map(_.id.is.toString), updateDescription _) &
+          ".dish" #> SHtml.ajaxSelect(curryList.toSeq.map(c => (c.id.is.toString, c.info)), dish.is.map(_.id.is.toString), updateDescription _) &
           ".sendOrder" #> SHtml.submit("Submit Order", processOrder _) & description(dish.is)
 
 

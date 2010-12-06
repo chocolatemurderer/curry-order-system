@@ -11,5 +11,5 @@ import code.model.{User, Order, Curry, Heat}
 import code.setup.LoadDB
 
 class Admin {
-  def reset = ".submit" #> SHtml.submit("Reset!?", () => S.redirectTo("/", () => {LoadDB.load ; S.notice("Database Reset!")} ))
+  def reset = ".submit" #> SHtml.submit("Reload!?", () => S.redirectTo("/", () => {LoadDB.load ; S.notice("Menu reloaded!")} ))
 }

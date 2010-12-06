@@ -46,7 +46,7 @@ class Boot {
       Menu.i("Home") / "index" >> loggedIn,
       Menu.i("Place Order") / "order" >> loggedIn,
       Menu.i("Current Orders") / "currentorder" >> Hidden,
-      Menu.i("Reset Database") / "resetdb" >> Hidden
+      Menu.i("Reload") / "reload" >> Hidden
     ) ::: User.sitemap
 
     // set the sitemap.  Note if you don't want access control for
@@ -69,5 +69,7 @@ class Boot {
 
     // Make a transaction span the whole HTTP request
     S.addAround(DB.buildLoanWrapper)
+
+    code.setup.LoadDB.load
   }
 }
