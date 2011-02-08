@@ -2,6 +2,8 @@ package code.model
 
 import java.util.{Timer, Date, Calendar, TimerTask}
 import javax.mail.Message
+import net.liftweb.util.Mailer
+import xml.NodeSeq
 
 class EmailTask(taskType: TaskType.Value,t : Timer) extends TimerTask {
 
@@ -38,5 +40,15 @@ class EmailTask(taskType: TaskType.Value,t : Timer) extends TimerTask {
 
   }
 
-  def sendMessage(m: Message) = null
+  def sendMessage(m: Message) {
+    import net.liftweb.util.Mailer
+    import Mailer._
+
+    val myRecips : List[String] = Nil
+    val plainContent : String = "..."
+    val xhtmlContent : NodeSeq = NodeSeq.Empty
+
+    Mailer.sendMail(From("***REMOVED***"), Subject("Curry Order"),
+                    (plainContent :: xhtmlContent :: myRecips.map(To(_))) : _*)
+  }
 }
