@@ -20,7 +20,23 @@ class CurrentOrders {
 
   def row(o: Order) = ".name *" #> (User.find(By(User.id, o.user.is)).map(_.realName) openOr "?") &
           ".curry *" #> (o.curry.obj.map(_.name.is) openOr "?") &
-          ".heat *" #> o.heat
+          ".heat *" #> o.heat &
+          ".delete *" #> deleteButton (o) &
+          ".order [id]" #> ("order" + o.id)
 
   def email = ".numberSeating" #> orders.size & ClearClearable & list
+
+  def deleteButton (o: Order):NodeSeq = {
+      val currentUser = User.currentUser openOr null
+      o.user.obj.filter(_ == currentUser) match {
+        case Full(_) => SHtml.ajaxButton("Delete", () =>{Order.delete_!(o)
+                  code.comet.OrderServer ! "deleted"
+          JsCmds.Replace("order" + o.id, NodeSeq.Empty)
+
+        })
+        case _ => NodeSeq.Empty
+      }
+
+
+  }
 }

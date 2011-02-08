@@ -84,6 +84,6 @@ class Boot {
 
     code.setup.LoadDB.load
 
-    new EmailTask(TaskType.ORDER,null).run
+    //new EmailTask(TaskType.ORDER,null).run
   }
 }
