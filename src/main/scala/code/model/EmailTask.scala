@@ -1,10 +1,15 @@
 package code.model
 
-import java.util.{Date, Calendar, TimerTask}
+import java.util.{Timer, Date, Calendar, TimerTask}
+import javax.mail.Message
 
-class EmailTask(taskType: TaskType.Value) extends TimerTask {
+class EmailTask(taskType: TaskType.Value,t : Timer) extends TimerTask {
+
+  t.schedule(this,this.getRunTime(Calendar.getInstance))
+
 
   def run {
+    sendMessage( if (taskType==TaskType.REMINDER) createReminder else createOrder )
   }
 
   def getRunTime(now: Calendar): Date = {
@@ -27,4 +32,11 @@ class EmailTask(taskType: TaskType.Value) extends TimerTask {
     newCal.getTime
 
   }
+
+  def createMessage:Message
+  {
+
+  }
+
+  def sendMessage(m: Message) = null
 }
