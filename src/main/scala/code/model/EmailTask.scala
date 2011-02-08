@@ -1,17 +1,23 @@
 package code.model
 
 import java.util.{Timer, Date, Calendar, TimerTask}
-import javax.mail.Message
 import net.liftweb.util.Mailer
 import xml.NodeSeq
+import net.liftweb.http.TemplateFinder
+import net.liftweb.common._
+import net.liftweb.util.Mailer
+     import Mailer._
 
-class EmailTask(taskType: TaskType.Value,t : Timer) extends TimerTask {
+class EmailTask(taskType: TaskType.Value, t: Timer) extends TimerTask {
 
-  t.schedule(this,this.getRunTime(Calendar.getInstance))
+  if(t!=null)
+  {
+  t.schedule(this, this.getRunTime(Calendar.getInstance))
+  }
 
 
   def run {
-    sendMessage( if (taskType==TaskType.REMINDER) createReminder else createOrder )
+    if (taskType == TaskType.REMINDER) createReminder else createOrder
   }
 
   def getRunTime(now: Calendar): Date = {
@@ -35,20 +41,33 @@ class EmailTask(taskType: TaskType.Value,t : Timer) extends TimerTask {
 
   }
 
-  def createMessage:Message
-  {
+    def createReminder {
+    val m = <div>
+    <p>Hi</p>
 
+    <p>Come to curry lunch</p>
+
+    <p>Please order by 11:30</p>
+
+    <p><a href="http://10.16.1.82/curry/">Place Order</a></p>
+    </div>
+
+      val myRecips: List[String] = User.findAll.map(_.email.is)
+
+      Mailer.sendMail (From ("***REMOVED***"), Subject ("Wednesday curry 12:15 at ***REMOVED*** Lower Hutt (***REMOVED***)"),
+      (XHTMLMailBodyType(m) :: myRecips.map( To(_) ) ): _*)
+    }
+
+  def createOrder {
+     TemplateFinder.findAnyTemplate("currentOrderEmail" :: Nil) match {
+      case Full(ns) =>
+        val m = (new code.snippet.CurrentOrders).email.apply(ns)
+                    val myRecips: List[String] = Order.findCurrent.flatMap(_.user.obj).map(_.email.is).distinct
+        //hemantsharma98@gmail.com
+      Mailer.sendMail (From ("***REMOVED***"), Subject ("Curry Order"),
+      (To ("***REMOVED***") :: XHTMLMailBodyType(m) :: myRecips.map( CC(_) )): _*)
+      case _ =>
+    }
   }
 
-  def sendMessage(m: Message) {
-    import net.liftweb.util.Mailer
-    import Mailer._
-
-    val myRecips : List[String] = Nil
-    val plainContent : String = "..."
-    val xhtmlContent : NodeSeq = NodeSeq.Empty
-
-    Mailer.sendMail(From("***REMOVED***"), Subject("Curry Order"),
-                    (plainContent :: xhtmlContent :: myRecips.map(To(_))) : _*)
-  }
 }

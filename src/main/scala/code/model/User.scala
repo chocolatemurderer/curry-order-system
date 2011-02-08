@@ -5,10 +5,12 @@ import _root_.net.liftweb.http._
 import _root_.net.liftweb.mapper._
 import _root_.net.liftweb.util._
 import _root_.net.liftweb.common._
+import xml.NodeSeq
 
 class User extends MegaProtoUser[User] {
   def getSingleton = User
   def realName = shortName
+  override lazy val email = new MyEmail(this, 50)
 }
 
 object User extends User with MetaMegaProtoUser[User] {

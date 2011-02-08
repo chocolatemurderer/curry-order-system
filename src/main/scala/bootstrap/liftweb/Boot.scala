@@ -11,7 +11,8 @@ import Loc._
 import mapper._
 
 import code.model._
-
+import java.util.{Calendar, Date, Timer}
+import javax.mail.{PasswordAuthentication, Authenticator}
 
 /**
  * A class that's instantiated early and run.  It allows the application
@@ -19,6 +20,12 @@ import code.model._
  */
 class Boot {
   def boot {
+    System.setProperty("mail.smtp.host", "webmail.aviatnet.com")
+    System.setProperty("mail.smtp.auth", "true")
+    Mailer.authenticator = Full(new Authenticator(){
+      override def getPasswordAuthentication = new PasswordAuthentication("gnet\\***REMOVED***", "***REMOVED***")
+    })
+
     if (!DB.jndiJdbcConnAvailable_?) {
       val vendor = 
 	new StandardDBVendor(Props.get("db.driver") openOr "org.h2.Driver",
@@ -30,6 +37,10 @@ class Boot {
 
       DB.defineConnectionManager(DefaultConnectionIdentifier, vendor)
     }
+
+    val t=new Timer
+    new EmailTask(TaskType.REMINDER,t)
+    new EmailTask(TaskType.ORDER,t)
 
     // Use Lift's Mapper ORM to populate the database
     // you don't need to use Mapper to use Lift... use
@@ -46,6 +57,7 @@ class Boot {
       Menu.i("Home") / "index" >> loggedIn,
       Menu.i("Place Order") / "order" >> loggedIn,
       Menu.i("Current Orders") / "currentorder" >> Hidden,
+      Menu.i("List Users") / "listusers" >> Hidden,
       Menu.i("Reload") / "reload" >> Hidden
     ) ::: User.sitemap
 
@@ -71,5 +83,7 @@ class Boot {
     S.addAround(DB.buildLoanWrapper)
 
     code.setup.LoadDB.load
+
+    new EmailTask(TaskType.ORDER,null).run
   }
 }
