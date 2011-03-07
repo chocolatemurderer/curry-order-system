@@ -27,6 +27,8 @@ object SchedulerTestSpecs extends Specification {
       task.getRunTime(cal) must be_==(new java.util.Date(111,1,9,6,0))
       cal.set(2011,1,9,6,1,7)
       task.getRunTime(cal) must be_==(new java.util.Date(111,1,16,6,0))
+      cal.set(2011,1,9,6,0,0)
+      task.getRunTime(cal) must be_==(new java.util.Date(111,1,16,6,0))
       val task2 = new EmailTask(TaskType.ORDER, null)
       task2.getRunTime(cal) must be_==(new java.util.Date(111,1,9,11,30))
     }
