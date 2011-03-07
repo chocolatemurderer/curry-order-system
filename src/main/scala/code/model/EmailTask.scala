@@ -64,9 +64,8 @@ class EmailTask(taskType: TaskType.Value, t: Timer) extends TimerTask {
       case Full(ns) =>
         val m = (new code.snippet.CurrentOrders).email.apply(ns)
                     val myRecips: List[String] = Order.findCurrent.flatMap(_.user.obj).map(_.email.is).distinct
-        //hemantsharma98@gmail.com
       Mailer.sendMail (From ("***REMOVED***"), Subject ("Curry Order"),
-      (To ("***REMOVED***") :: XHTMLMailBodyType(m) :: myRecips.map( CC(_) )): _*)
+      (To ("hemantsharma98@gmail.com") :: XHTMLMailBodyType(m) :: myRecips.map( CC(_) )): _*)
       case _ =>
     }
   }
