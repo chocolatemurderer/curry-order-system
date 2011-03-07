@@ -11,6 +11,9 @@ class User extends MegaProtoUser[User] {
   def getSingleton = User
   def realName = shortName
   override lazy val email = new MyEmail(this, 50)
+  def isSuper = {
+    (email == "***REMOVED***" || email == "***REMOVED***" || email == "***REMOVED***")
+  }
 }
 
 object User extends User with MetaMegaProtoUser[User] {
