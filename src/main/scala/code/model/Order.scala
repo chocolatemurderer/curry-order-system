@@ -10,7 +10,8 @@ def getSingleton=Order
   object user extends LongMappedMapper(this, User) 
   object curry extends LongMappedMapper(this, Curry) 
   object heat extends MappedEnum(this, Heat)
-}  
+  object takeAway extends MappedBoolean(this)
+}
 
 object Order extends Order with LongKeyedMetaMapper[Order] {
   def findCurrent = findAll(By_>(Order.timeStamp, new java.util.Date(new java.util.Date().getTime - (3*24*60*60*1000))))

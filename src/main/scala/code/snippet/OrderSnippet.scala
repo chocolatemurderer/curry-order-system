@@ -11,13 +11,19 @@ import code.model.{User, Order, Curry, Heat}
 
 class OrderSnippet {
   val curryList = Curry.findAll.filterNot(_.deprecated.is)
+  var ta = false
   object heat extends RequestVar[Heat.Heat](Heat.mildMedium)
   object dish extends net.liftweb.http.SessionVar[Box[Curry]](Full(curryList.head))
 
   def order = ".hotness" #> SHtml.select(Heat.values.toSeq.map(e => (e.toString, e.toString)), Full(heat.is.toString), (s: String) => heat(Heat.withName(s))) &
           ".dish" #> SHtml.ajaxSelect(curryList.toSeq.map(c => (c.id.is.toString, c.info)), dish.is.map(_.id.is.toString), updateDescription _) &
+          ".takeAway" #> SHtml.ajaxCheckbox(false, getTakeAway _) &
           ".sendOrder" #> SHtml.submit("Submit Order", processOrder _) & description(dish.is)
 
+  def getTakeAway(b: Boolean) = {
+    ta = b
+    JsCmds.Noop
+  }
 
   def updateDescription(s: String): JsCmd = {
     Curry.find(s) match {
@@ -43,6 +49,7 @@ class OrderSnippet {
     order.user(User.currentUser)
     order.curry(dish.is)
     order.heat(heat)
+    order.takeAway(ta)
     order.save
     code.comet.OrderServer ! "new"
 
