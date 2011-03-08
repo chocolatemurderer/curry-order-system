@@ -5,8 +5,10 @@ import net.liftweb.util.Mailer
 import xml.NodeSeq
 import net.liftweb.http.TemplateFinder
 import net.liftweb.common._
+import net.liftweb.util.Helpers._
 import net.liftweb.util.Mailer
-     import Mailer._
+import Mailer._
+import java.net.{InetAddress, NetworkInterface}
 
 class EmailTask(taskType: TaskType.Value, t: Timer) extends TimerTask {
 
@@ -50,7 +52,7 @@ class EmailTask(taskType: TaskType.Value, t: Timer) extends TimerTask {
 
     <p>Please order by 11:30</p>
 
-    <p><a href="http://10.16.1.82/curry/">Place Order</a></p>
+    <p><a href={ "http://" + getIp + "/curry/" }>Place Order</a></p>
     </div>
 
       val myRecips: List[String] = User.findAll.map(_.email.is)
@@ -60,14 +62,34 @@ class EmailTask(taskType: TaskType.Value, t: Timer) extends TimerTask {
     }
 
   def createOrder {
+    var emailTo="***REMOVED***"
+    if(getIp.equals("10.16.1.82"))
+    {
+      emailTo="hemantsharma98@gmail.com"
+    }
+
      TemplateFinder.findAnyTemplate("currentOrderEmail" :: Nil) match {
       case Full(ns) =>
         val m = (new code.snippet.CurrentOrders).email.apply(ns)
                     val myRecips: List[String] = Order.findCurrent.flatMap(_.user.obj).map(_.email.is).distinct
       Mailer.sendMail (From ("***REMOVED***"), Subject ("Curry Order"),
-      (To ("hemantsharma98@gmail.com") :: XHTMLMailBodyType(m) :: myRecips.map( CC(_) )): _*)
+      (To (emailTo) :: XHTMLMailBodyType(m) :: myRecips.map( CC(_) )): _*)
       case _ =>
     }
+  }
+
+  def getIp: String = {
+    var ipadd = NetworkInterface.getNetworkInterfaces
+    while (ipadd.hasMoreElements) {
+      var inetAddr = ipadd.nextElement.getInetAddresses
+      while (inetAddr.hasMoreElements) {
+        var hostAddress: String = inetAddr.nextElement.getHostAddress
+        if (hostAddress.startsWith("10")) {
+          return hostAddress
+        }
+      }
+    }
+    return "127.0.0.1"
   }
 
 }
