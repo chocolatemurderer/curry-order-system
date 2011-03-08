@@ -22,4 +22,6 @@ object User extends User with MetaMegaProtoUser[User] {
                                 <lift:bind /></lift:surround>)
    override def fieldOrder = List(id, firstName, lastName, email, locale, timezone, password)
    override def skipEmailValidation = true
+
+  override val basePath: List[String] = "user" :: Nil
 }

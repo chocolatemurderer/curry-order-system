@@ -50,14 +50,14 @@ class Boot {
     // where to search snippet
     LiftRules.addToPackages("code")
 
-    val loggedIn = If(() => User.loggedIn_?, () => RedirectResponse("/user_mgt/login"))
+    val loggedIn = If(() => User.loggedIn_?, () => RedirectResponse(User.loginPageURL))
 
     // Build SiteMap
     val entries = List(
       Menu.i("Home") / "index" >> loggedIn,
       Menu.i("Place Order") / "order" >> loggedIn,
       Menu.i("Current Orders") / "currentorder" >> Hidden,
-      Menu.i("List Users") / "listusers" >> Hidden,
+      Menu.i("List Users") / "user" / "list" >> Hidden,
       Menu.i("Reload") / "reload" >> Hidden
     ) ::: User.sitemap
 
