@@ -14,13 +14,12 @@ class EmailTask(taskType: TaskType.Value, t: Timer) extends TimerTask {
 
   if(t!=null)
   {
-    t.schedule(this, this.getRunTime(Calendar.getInstance))
+    t.scheduleAtFixedRate(this, this.getRunTime(Calendar.getInstance), 7*24*60*60000)
   }
 
 
   def run {
     if (taskType == TaskType.REMINDER) createReminder else createOrder
-    t.schedule(this, this.getRunTime(Calendar.getInstance))
   }
 
   def getRunTime(now: Calendar): Date = {
