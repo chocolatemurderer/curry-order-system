@@ -15,7 +15,7 @@ class HelloWorld {
   def howdy = "#time *" #> date.map(_.toString)
 
   /*
-   lazy val date: Date = DependencyFactory.time.vend // create the date via factory
+     lazy val date: Date = DependencyFactory.time.vend // create the date via factory
 
    def howdy = "#time *" #> date.toString
    */
