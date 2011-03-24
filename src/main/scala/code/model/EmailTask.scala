@@ -51,7 +51,7 @@ class EmailTask(taskType: TaskType.Value, t: Timer) extends TimerTask {
 
     <p>Please order by 11:30</p>
 
-    <p><a href={ "http://" + getIp + "/curry/" }>Place Order</a></p>
+    <p><a href={ "http://" + getIp }>Place Order</a></p>
     </div>
 
       val myRecips: List[String] = User.findAll.map(_.email.is)
