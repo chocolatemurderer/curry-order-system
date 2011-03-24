@@ -62,7 +62,7 @@ class EmailTask(taskType: TaskType.Value, t: Timer) extends TimerTask {
 
   def createOrder {
     var emailTo="***REMOVED***"
-    if(getIp.equals("10.16.1.82"))
+    if(getIp.equals("***REMOVED***"))
     {
       emailTo="hemantsharma98@gmail.com"
     }
