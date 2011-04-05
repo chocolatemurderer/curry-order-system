@@ -8,6 +8,7 @@ import xml.NodeSeq
 import net.liftweb.http.js.JsCmds.Replace
 import net.liftweb.http.{S, RequestVar, TemplateFinder, SHtml}
 import code.model.{User, Order, Curry, Heat}
+import java.util.Calendar
 
 class OrderSnippet {
   val curryList = Curry.findAll.filterNot(_.deprecated.is)
@@ -44,17 +45,32 @@ class OrderSnippet {
   }
 
   def processOrder(): JsCmd = {
-    val order: Order = Order.create
-    order.timeStamp(new java.util.Date())
-    order.user(User.currentUser)
-    order.curry(dish.is)
-    order.heat(heat)
-    order.takeAway(ta)
-    order.save
-    code.comet.OrderServer ! "new"
 
-    S.notice("Order accepted")
-    S.redirectTo("/currentorder")
+    val calendar: Calendar = Calendar.getInstance
+    if (calendar.get(Calendar.DAY_OF_WEEK) != Calendar.WEDNESDAY || calendar.get(Calendar.HOUR_OF_DAY) > 13)
+    {
+      S.notice("You can only order curries on Wednesday mornings")
+      S.redirectTo("/index")
+    }
+    else if (calendar.get(Calendar.HOUR_OF_DAY) > 11 || (calendar.get(Calendar.HOUR_OF_DAY) == 11 && calendar.get(Calendar.MINUTE) > 28 ))
+    {
+      S.notice("You have missed the cutoff time.  You will have to ring (***REMOVED***) and place your order manually")
+      S.redirectTo("/order")
+    }
+    else
+    {
+      val order: Order = Order.create
+      order.timeStamp(new java.util.Date())
+      order.user(User.currentUser)
+      order.curry(dish.is)
+      order.heat(heat)
+      order.takeAway(ta)
+      order.save
+      code.comet.OrderServer ! "new"
+
+      S.notice("Order accepted")
+      S.redirectTo("/currentorder")
+    }
   }
 
   lazy val descriptionPart: NodeSeq = TemplateFinder.findAnyTemplate("order" :: Nil) match {
