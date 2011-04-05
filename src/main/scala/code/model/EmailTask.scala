@@ -16,6 +16,7 @@ class EmailTask(taskType: TaskType.Value, t: Timer) extends TimerTask
   if (t != null)
   {
     t.scheduleAtFixedRate(this, this.getRunTime(Calendar.getInstance), 7 * 24 * 60 * 60000)
+getIp
   }
 
 
@@ -112,9 +113,16 @@ class EmailTask(taskType: TaskType.Value, t: Timer) extends TimerTask
           val hostAddress: String = inetAddress.getHostAddress
           if (networkInterface.getName.toLowerCase.startsWith("eth"))
           {
-            if (networkInterface.getName.toLowerCase.endsWith(":0"))
+            val subInterfaces = networkInterface.getSubInterfaces
+            while(subInterfaces.hasMoreElements)
             {
-              return hostAddress
+              val sub = subInterfaces.nextElement
+              if(!subInterfaces.hasMoreElements)
+              {
+                ipAddress=sub.getInetAddresses.nextElement.getHostAddress
+                System.err.println(hostAddress+" -> "+ipAddress)
+                return ipAddress
+              }
             }
             ipAddress = hostAddress
           }
