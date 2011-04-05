@@ -8,6 +8,7 @@ import xml.NodeSeq
 import net.liftweb.http.js.JsCmds.Replace
 import net.liftweb.http.{S, RequestVar, TemplateFinder, SHtml}
 import code.model.{User, Order, Curry, Heat}
+import java.util.Calendar
 
 class OrderSnippet {
   val curryList = Curry.findAll.filterNot(_.deprecated.is)
@@ -73,23 +74,23 @@ class OrderSnippet {
     }
     else
     {
-    val order: Order = Order.create
-    order.timeStamp(new java.util.Date())
-    order.user(User.currentUser)
-    order.curry(dish.is)
-    order.heat(heat)
-    order.takeAway(ta)
-    order.orderFor(orderedFor)
-    order.save
-    code.comet.OrderServer ! "new"
+      val order: Order = Order.create
+      order.timeStamp(new java.util.Date())
+      order.user(User.currentUser)
+      order.curry(dish.is)
+      order.heat(heat)
+      order.takeAway(ta)
+      order.orderFor(orderedFor)
+      order.save
+      code.comet.OrderServer ! "new"
 
-    S.notice("Order accepted")
-    S.redirectTo("/currentorder")
+      S.notice("Order accepted")
+      S.redirectTo("/currentorder")
+    }
   }
 
   lazy val descriptionPart: NodeSeq = TemplateFinder.findAnyTemplate("order" :: Nil) match {
     case Full(t) => t \\ "table"
     case _ => NodeSeq.Empty
   }
-
 }
