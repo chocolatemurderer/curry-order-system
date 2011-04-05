@@ -8,7 +8,7 @@ import net.liftweb.common._
 import net.liftweb.util.Helpers._
 import net.liftweb.util.Mailer
 import Mailer._
-import java.net.{InetAddress, NetworkInterface}
+import java.net.{Inet4Address, InetAddress, NetworkInterface}
 
 class EmailTask(taskType: TaskType.Value, t: Timer) extends TimerTask {
 
@@ -18,8 +18,8 @@ class EmailTask(taskType: TaskType.Value, t: Timer) extends TimerTask {
   }
 
 
-  def run {
-    if (taskType == TaskType.REMINDER) createReminder else createOrder
+  def run() {
+    if (taskType == TaskType.REMINDER) createReminder() else createOrder()
   }
 
   def getRunTime(now: Calendar): Date = {
@@ -43,7 +43,7 @@ class EmailTask(taskType: TaskType.Value, t: Timer) extends TimerTask {
 
   }
 
-    def createReminder {
+    def createReminder() {
     val m = <div>
     <p>Hi</p>
 
@@ -54,13 +54,13 @@ class EmailTask(taskType: TaskType.Value, t: Timer) extends TimerTask {
     <p><a href={ "http://" + getIp }>Place Order</a></p>
     </div>
 
-      val myRecips: List[String] = User.findAll.map(_.email.is)
+      val myRecips: List[String] = User.findAll().map(_.email.is)
 
       Mailer.sendMail (From ("***REMOVED***"), Subject ("Wednesday curry 12:15 at ***REMOVED*** Lower Hutt (***REMOVED***)"),
       (XHTMLMailBodyType(m) :: myRecips.map( To(_) ) ): _*)
     }
 
-  def createOrder {
+  def createOrder() {
     var emailTo="***REMOVED***"
     if(getIp.equals("***REMOVED***"))
     {
@@ -78,17 +78,28 @@ class EmailTask(taskType: TaskType.Value, t: Timer) extends TimerTask {
   }
 
   def getIp: String = {
-    var ipadd = NetworkInterface.getNetworkInterfaces
+    var ipAddress = "127.0.0.1"
+    val ipadd = NetworkInterface.getNetworkInterfaces
     while (ipadd.hasMoreElements) {
-      var inetAddr = ipadd.nextElement.getInetAddresses
+      val networkInterface: NetworkInterface = ipadd.nextElement
+      var inetAddr = networkInterface.getInetAddresses
       while (inetAddr.hasMoreElements) {
-        var hostAddress: String = inetAddr.nextElement.getHostAddress
-        if (hostAddress.startsWith("10")) {
-          return hostAddress
+        val inetAddress: InetAddress = inetAddr.nextElement
+        if(inetAddress.isInstanceOf[Inet4Address])
+        {
+          val hostAddress: String = inetAddress.getHostAddress
+          if (networkInterface.getName.toLowerCase.startsWith("eth"))
+          {
+            if (networkInterface.getName.toLowerCase.endsWith(":0"))
+            {
+              return hostAddress
+            }
+            ipAddress = hostAddress
+          }
         }
       }
     }
-    return "127.0.0.1"
+    return ipAddress
   }
 
 }
