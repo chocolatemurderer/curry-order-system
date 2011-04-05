@@ -11,21 +11,22 @@ import code.model.{User, Order, Curry, Heat}
 import net.liftweb.mapper.{By, By_>, Descending}
 
 class CurrentOrders {
-  val orders = Order.findCurrent
-  
-  def list = ".order" #> rows & ClearClearable
-//  def order: (NodeSeq => NodeSeq) = ".orders" #>  & ClearClearable
+  val ordersCurrent = Order.findCurrent
+  val ordersTakeaways = Order.findTakeaways
 
-  def rows: (NodeSeq => NodeSeq) = (ns: NodeSeq) => orders.flatMap(row(_).apply(ns))
+  def listCurr = ".orderCurr" #> rowsCurr & ClearClearable
+  def listTake = ".orderTake" #> rowsTake & ClearClearable
 
-  def row(o: Order) = ".name *" #> (User.find(By(User.id, o.user.is)).map(_.realName) openOr "?") &
+  def rowsCurr: (NodeSeq => NodeSeq) = (ns: NodeSeq) => ordersCurrent.flatMap(row(_).apply(ns))
+  def rowsTake: (NodeSeq => NodeSeq) = (ns: NodeSeq) => ordersTakeaways.flatMap(row(_).apply(ns))
+
+  def row(o: Order) = ".name *" #> (if(o.orderFor.toString.isEmpty){User.find(By(User.id, o.user.is)).map(_.realName) openOr "?"} else {(User.find(By(User.id, o.user.is)).map(_.realName) openOr "?") + " (" + o.orderFor.toString +")"}) &
           ".curry *" #> (o.curry.obj.map(_.name.is) openOr "?") &
           ".heat *" #> o.heat &
-          ".takeAway *" #> {if(o.takeAway){"Take Away"} else {""}} &
           ".delete *" #> deleteButton (o) &
           ".order [id]" #> ("order" + o.id)
 
-  def email = ".numberSeating" #> orders.size & ClearClearable & list
+  def email = ".numberSeating" #> ordersCurrent.size & ClearClearable & listCurr & listTake
 
   def deleteButton (o: Order):NodeSeq = {
       val currentUser = User.currentUser openOr null

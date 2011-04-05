@@ -22,5 +22,5 @@ class OrderCount extends CometActor with CometListener {
       reRender()
   }
   def render = ".count *" #> (count + " orders") & ClearClearable
-  private def count = Order.findCurrent.size
+  private def count = Order.findAllOrders.size
 }
