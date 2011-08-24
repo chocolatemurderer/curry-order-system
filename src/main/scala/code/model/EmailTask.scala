@@ -16,7 +16,6 @@ class EmailTask(taskType: TaskType.Value, t: Timer) extends TimerTask
   if (t != null)
   {
     t.scheduleAtFixedRate(this, this.getRunTime(Calendar.getInstance), 7 * 24 * 60 * 60000)
-getIp
   }
 
 
