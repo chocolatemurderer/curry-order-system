@@ -50,17 +50,22 @@ class Boot {
     val loggedIn = If(() => User.loggedIn_?, () => RedirectResponse(User.loginPageURL))
 
     // Build SiteMap
-    val entries = List(
+    val sitemap = SiteMap(
       Menu.i("Home") / "index" >> loggedIn,
       Menu.i("Place Order") / "order" >> loggedIn,
       Menu.i("Current Orders") / "currentorder" >> Hidden,
       Menu.i("List Users") / "user" / "list" >> Hidden,
       Menu.i("Reload") / "reload" >> Hidden
-    ) ::: User.sitemap
+    )
+
+    def sitemapMutators = User.sitemapMutator
 
     // set the sitemap.  Note if you don't want access control for
     // each page, just comment this line out.
-    LiftRules.setSiteMap(SiteMap(entries:_*))
+    LiftRules.setSiteMapFunc(() => sitemapMutators(sitemap))
+
+    // Use jQuery 1.4
+    LiftRules.jsArtifacts = net.liftweb.http.js.jquery.JQuery14Artifacts
 
     //Show the spinny image when an Ajax call starts
     LiftRules.ajaxStart =
@@ -75,6 +80,10 @@ class Boot {
 
     // What is the function to test if a user is logged in?
     LiftRules.loggedInTest = Full(() => User.loggedIn_?)
+
+    // Use HTML5 for rendering
+    LiftRules.htmlProperties.default.set((r: Req) =>
+      new Html5Properties(r.userAgent))    
 
     // Make a transaction span the whole HTTP request
     S.addAround(DB.buildLoanWrapper)

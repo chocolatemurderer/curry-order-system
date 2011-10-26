@@ -1,11 +1,9 @@
-package code 
-package model 
+package code
+package model
 
-import _root_.net.liftweb.http._
-import _root_.net.liftweb.mapper._
-import _root_.net.liftweb.util._
-import _root_.net.liftweb.common._
-import xml.NodeSeq
+import net.liftweb.mapper._
+import net.liftweb.util._
+import net.liftweb.common._
 
 class User extends MegaProtoUser[User] {
   def getSingleton = User
