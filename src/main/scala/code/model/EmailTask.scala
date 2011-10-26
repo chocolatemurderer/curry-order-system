@@ -79,10 +79,10 @@ class EmailTask(taskType: TaskType.Value, t: Timer) extends TimerTask
 
   def createOrder()
   {
-    var emailTo = "***REMOVED***"
-    if (getIp.equals("***REMOVED***"))
+    var emailTo = To("***REMOVED***") :: To("***REMOVED***") :: Nil
+    if (getIp.equals("***REMOVED***")) // TODO work off development mode instead
     {
-      emailTo = "hemantsharma98@gmail.com"
+      emailTo = To("hemantsharma98@gmail.com") :: To("chris.mei@gmail.com") :: Nil
     }
 
     TemplateFinder.findAnyTemplate("currentOrderEmail" :: Nil) match
@@ -91,7 +91,7 @@ class EmailTask(taskType: TaskType.Value, t: Timer) extends TimerTask
         val m = (new code.snippet.CurrentOrders).email.apply(ns)
         val myRecips: List[String] = Order.findCurrent.flatMap(_.user.obj).map(_.email.is).distinct
         Mailer.sendMail(From("***REMOVED***"), Subject("Curry Order"),
-          (To(emailTo) :: XHTMLMailBodyType(m) :: myRecips.map(CC(_))): _*)
+          (emailTo ::: (XHTMLMailBodyType(m) :: myRecips.map(CC(_)))): _*)
       case _ =>
     }
   }
