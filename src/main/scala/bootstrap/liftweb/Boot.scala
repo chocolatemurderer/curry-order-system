@@ -20,11 +20,8 @@ import javax.mail.{PasswordAuthentication, Authenticator}
  */
 class Boot {
   def boot {
-    System.setProperty("mail.smtp.host", "webmail.aviatnet.com")
-    System.setProperty("mail.smtp.auth", "true")
-    Mailer.authenticator = Full(new Authenticator(){
-      override def getPasswordAuthentication = new PasswordAuthentication("gnet\\***REMOVED***", "***REMOVED***")
-    })
+    System.setProperty("mail.smtp.host", "localhost")
+    System.setProperty("mail.smtp.auth", "false")
 
     if (!DB.jndiJdbcConnAvailable_?) {
       val vendor = 
