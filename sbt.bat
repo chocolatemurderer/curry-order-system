@@ -1,2 +1,3 @@
 set SCRIPT_DIR=%~dp0
-java -XX:+CMSClassUnloadingEnabled -XX:MaxPermSize=256m -Xmx712M -Xss2M -jar "%SCRIPT_DIR%\sbt-launcher.jar" %*
+set JREBEL_DIR=C:\JRebel\
+java -XX:+CMSClassUnloadingEnabled -XX:MaxPermSize=786m -Xmx712M -Xss2M -noverify -javaagent:"%JREBEL_DIR%\jrebel.jar" -jar "%SCRIPT_DIR%\sbt-launcher.jar" %*
