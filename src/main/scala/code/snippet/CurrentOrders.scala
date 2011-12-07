@@ -31,11 +31,11 @@ class CurrentOrders {
   def deleteButton (o: Order):NodeSeq = {
       val currentUser = User.currentUser openOr null
       o.user.obj.filter(_ == currentUser) match {
-        case Full(_) => SHtml.ajaxButton("Delete", () =>{Order.delete_!(o)
+        case Full(_) => SHtml.ajaxButton("Delete", () => {
+          Order.delete_!(o)
           code.comet.OrderServer ! "deleted"
           S.notice("Order Deleted")
           JsCmds.Replace("order" + o.id, NodeSeq.Empty)
-
         })
         case _ => NodeSeq.Empty
       }

@@ -27,7 +27,8 @@ class Users {
     val currentUser = User.currentUser openOr null
     if (currentUser != null && (o == currentUser || currentUser.isSuper))
     {
-      SHtml.ajaxButton("Delete", () =>{User.delete_!(o)
+      SHtml.ajaxButton("Delete", () => {
+        User.delete_!(o)
         code.comet.OrderServer ! "deleted"
         S.notice("User Deleted")
         JsCmds.Replace("user" + o.id, NodeSeq.Empty)

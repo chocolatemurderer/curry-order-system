@@ -3,9 +3,10 @@ package code.model
 import _root_.net.liftweb.mapper._
 import _root_.net.liftweb.util._
 import _root_.net.liftweb.common._
+import java.util.Date
 
-class Order extends LongKeyedMapper[Order] with IdPK{
-def getSingleton=Order 
+class Order extends LongKeyedMapper[Order] with IdPK {
+  def getSingleton = Order
   object timeStamp extends MappedDateTime(this)
   object user extends LongMappedMapper(this, User) 
   object curry extends LongMappedMapper(this, Curry) 
@@ -15,9 +16,24 @@ def getSingleton=Order
 }
 
 object Order extends Order with LongKeyedMetaMapper[Order] {
-  def findCurrent = findAll(By_>(Order.timeStamp, new java.util.Date(new java.util.Date().getTime - (3*24*60*60*1000))), By(Order.takeAway, false))
-  def findTakeaways = findAll(By_>(Order.timeStamp, new java.util.Date(new java.util.Date().getTime - (3*24*60*60*1000))), By(Order.takeAway, true))
-  def findAllOrders = findAll(By_>(Order.timeStamp, new java.util.Date(new java.util.Date().getTime - (3*24*60*60*1000))))
+
+  def lastThreeDays(): Date = {
+    new java.util.Date(new java.util.Date().getTime - (3 * 24 * 60 * 60 * 1000))
+  }
+
+  def findCurrent = {
+    findAll(
+      By_>(Order.timeStamp, lastThreeDays()),
+      By(Order.takeAway, false)
+    )
+  }
+
+  def findTakeaways = {
+    findAll(
+      By_>(Order.timeStamp, lastThreeDays()),
+      By(Order.takeAway, true)
+    )
+  }
 }
 
 object Heat extends Enumeration{
