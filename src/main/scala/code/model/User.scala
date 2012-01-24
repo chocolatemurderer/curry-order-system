@@ -22,4 +22,6 @@ object User extends User with MetaMegaProtoUser[User] {
    override def skipEmailValidation = true
 
   override val basePath: List[String] = "user" :: Nil
+
+  override def emailFrom = "***REMOVED***"
 }
