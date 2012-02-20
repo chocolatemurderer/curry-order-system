@@ -82,7 +82,7 @@ class EmailTask(taskType: TaskType.Value, t: Timer) extends TimerTask
     var emailTo = To("***REMOVED***") :: To("***REMOVED***") :: Nil
     if (getIp.equals("***REMOVED***")) // TODO work off development mode instead
     {
-      emailTo = To("hemantsharma98@gmail.com") :: To("chris.mei@gmail.com") :: Nil
+      emailTo = To("***REMOVED***") :: To("***REMOVED***") :: Nil
     }
 
     TemplateFinder.findAnyTemplate("currentOrderEmail" :: Nil) match
