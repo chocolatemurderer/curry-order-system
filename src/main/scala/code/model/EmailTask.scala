@@ -67,7 +67,7 @@ class EmailTask(taskType: TaskType.Value, t: Timer) extends TimerTask
       <p>Please order by 11:30</p>
 
       <p>
-        <a href={"http://" + getIp}>Place Order</a>
+        <a href={"http://***REMOVED***"}>Place Order</a>
       </p>
     </div>
 
@@ -80,7 +80,7 @@ class EmailTask(taskType: TaskType.Value, t: Timer) extends TimerTask
   def createOrder()
   {
     var emailTo = To("***REMOVED***") :: To("***REMOVED***") :: Nil
-    if (getIp.equals("***REMOVED***")) // TODO work off development mode instead
+    if (getIp.equals("10.16.10.222")) // TODO work off development mode instead
     {
       emailTo = To("***REMOVED***") :: To("***REMOVED***") :: Nil
     }
