@@ -90,6 +90,6 @@ class Boot {
 
     code.setup.LoadDB.load
 
-    //new EmailTask(TaskType.ORDER,null).run
+    LiftRules.unloadHooks.append(() => t.cancel())
   }
 }

@@ -1,14 +1,13 @@
 package code.model
 
 import java.util.{Timer, Date, Calendar, TimerTask}
-import net.liftweb.util.Mailer
 import xml.NodeSeq
 import net.liftweb.http.TemplateFinder
 import net.liftweb.common._
 import net.liftweb.util.Helpers._
-import net.liftweb.util.Mailer
-import Mailer._
+import net.liftweb.util.Mailer._
 import java.net.{Inet4Address, InetAddress, NetworkInterface}
+import net.liftweb.util.{Props, Mailer}
 
 class EmailTask(taskType: TaskType.Value, t: Timer) extends TimerTask
 {
@@ -79,10 +78,9 @@ class EmailTask(taskType: TaskType.Value, t: Timer) extends TimerTask
 
   def createOrder()
   {
-    var emailTo = To("***REMOVED***") :: To("***REMOVED***") :: Nil
-    if (getIp.equals("10.16.10.222")) // TODO work off development mode instead
-    {
-      emailTo = To("***REMOVED***") :: To("***REMOVED***") :: Nil
+    val emailTo = Props.mode match {
+      case Props.RunModes.Production => To("***REMOVED***") :: To("***REMOVED***") :: Nil
+      case _ => To("***REMOVED***") :: To("***REMOVED***") :: Nil
     }
 
     TemplateFinder.findAnyTemplate("currentOrderEmail" :: Nil) match
@@ -95,40 +93,4 @@ class EmailTask(taskType: TaskType.Value, t: Timer) extends TimerTask
       case _ =>
     }
   }
-
-  def getIp: String =
-  {
-    var ipAddress = "127.0.0.1"
-    val ipadd = NetworkInterface.getNetworkInterfaces
-    while (ipadd.hasMoreElements)
-    {
-      val networkInterface: NetworkInterface = ipadd.nextElement
-      var inetAddr = networkInterface.getInetAddresses
-      while (inetAddr.hasMoreElements)
-      {
-        val inetAddress: InetAddress = inetAddr.nextElement
-        if (inetAddress.isInstanceOf[Inet4Address])
-        {
-          val hostAddress: String = inetAddress.getHostAddress
-          if (networkInterface.getName.toLowerCase.startsWith("eth"))
-          {
-            val subInterfaces = networkInterface.getSubInterfaces
-            while(subInterfaces.hasMoreElements)
-            {
-              val sub = subInterfaces.nextElement
-              if(!subInterfaces.hasMoreElements)
-              {
-                ipAddress=sub.getInetAddresses.nextElement.getHostAddress
-                System.err.println(hostAddress+" -> "+ipAddress)
-                return ipAddress
-              }
-            }
-            ipAddress = hostAddress
-          }
-        }
-      }
-    }
-    return ipAddress
-  }
-
 }
