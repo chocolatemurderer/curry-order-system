@@ -5,7 +5,7 @@ import _root_.net.liftweb.common._
 import Helpers._
 import net.liftweb.http.js.{JsCmd, JsCmds}
 import xml.NodeSeq
-import net.liftweb.http.js.JsCmds.Replace
+import net.liftweb.http.js.JsCmds.SetHtml
 import net.liftweb.http.{S, RequestVar, TemplateFinder, SHtml}
 import code.model.{User, Order, Curry, Heat}
 import java.util.Calendar
@@ -46,7 +46,7 @@ class OrderSnippet {
       case Full(aCurry) =>
         dish(Full(aCurry))
         val result = description(Full(aCurry)).apply(descriptionPart)
-        Replace("descriptionTable", result)
+        SetHtml("descriptionTable", result)
       case _ => JsCmds.Noop
     }
   }
@@ -90,7 +90,7 @@ class OrderSnippet {
   }
 
   lazy val descriptionPart: NodeSeq = TemplateFinder.findAnyTemplate("order" :: Nil) match {
-    case Full(t) => t \\ "table"
+    case Full(t) => ("#descriptionTable ^*" #> "ignored").apply(t)
     case _ => NodeSeq.Empty
   }
 }

@@ -11,45 +11,63 @@
   <div class="lift:surround?with=default;at=content" id="real_content">
     <h2>Your Curry Order</h2>
 
-    <form action="/order" name="Order" class="lift:snippet?type=OrderSnippet.order">
-        <span>Main:</span>
-        <select name="food" class="dish">
+    <form action="/order" name="Order" class="lift:snippet?type=OrderSnippet.order form-vertical">
+<div class="row">
+      <div class="span6">
+        <div class="control-group">
+            <label class="control-label">Main</label>
+            <div class="controls">
+                <select name="food" class="dish input-xlarge">
             <option>Butter Chicken</option>                                     
         </select>
-        <select name="Hotness" class="hotness">
+         <span class="help-block">All mains are served with basmati rice and naan bread <em>(Except for Biryani)</em></span>
+            </div>
+          </div>
+
+        <div class="control-group">
+            <label class="control-label">Spice</label>
+            <div class="controls">
+                <select name="Hotness" class="hotness">
             <option>Very Mild</option>
         </select>
-        <br />
-        <span>Take Away:</span>
-        <input type="checkbox"  name="TakeAway" class="takeAway"></input>
-        <br />
-        <span>Order On Behalf:</span>
-        <input type="textbox"   name="Order for" class="orderFor"></input>
-        <p>All mains are served with basmati rice and naan bread <b>(Except for Biryani)</b></p>
-        <hr />
+            </div>
+          </div>
 
-        <h4>About this dish</h4>
+<div class="control-group">
+            <label class="control-label">Take-away?</label>
+            <div class="controls">
+                <input type="checkbox"  name="TakeAway" class="takeAway"></input>
+            </div>
+          </div>
 
-        <table id="descriptionTable">
-            <tr>
-                <td>
-                    <img id="pic"
-                         src="http://orders.littleindia.co.nz/media/catalog/product/cache/1/image/340x255/9df78eab33525d08d6e5fb8d27136e95/3/4/34_murg_mumtaz.jpg"
-                         alt="Murg Mumtaz (Butter Chicken)"/>
-                </td>
-                <td>
-                    <h1 id="curryName">Murg Mumtaz (Butter Chicken)</h1>
+<div class="control-group">
+            <label class="control-label">On Behalf Of</label>
+            <div class="controls">
+                <input type="textbox"   name="Order for" class="orderFor"></input>
+            </div>
+          </div>
+<div class="control-group">
+            <div class="controls">
+                <input name="Order" value="order" class="sendOrder btn btn-primary" type="submit"/>
+            </div>
+          </div>
+        
+    </div>
 
-                    <p id="desc">A world famous Indian delicacy. Also known as butter chicken. Half cooked the tandoori
-                        way
-                        and finished the curry way, with crushed cashews, cream and spices.</p>
-                </td>
-            </tr>
-        </table>
+        <div id="descriptionTable" class="span3">
+                    <ul class="thumbnails">
+                      <li class="span3">
+                        <div class="thumbnail">
+                          <img id="pic" src="http://placehold.it/300x200" alt="">
+                          <p id="desc">Thumbnail caption...</p>
+                        </div>
+                      </li>
+                    </ul>
+                </div>
 
-        <input name="Order" value="order" class="sendOrder" type="submit"/>
+</div>
+        
     </form>
-    <hr class="space"/>
 </div>
 
 </body>

@@ -53,7 +53,7 @@ class Boot {
     val sitemap = SiteMap(
       Menu.i("Home") / "index" >> loggedIn,
       Menu.i("Place Order") / "order" >> loggedIn,
-      Menu.i("Current Orders") / "currentorder" >> Hidden,
+      Menu.i("Current Orders") / "currentorder",
       Menu.i("List Users") / "user" / "list" >> Hidden,
       Menu.i("Reload") / "reload" >> Hidden
     )
