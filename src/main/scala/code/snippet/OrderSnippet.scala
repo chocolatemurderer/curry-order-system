@@ -11,7 +11,14 @@ import code.model.{User, Order, Curry, Heat}
 import java.util.Calendar
 
 class OrderSnippet {
-  val curryList = Curry.findAll.filterNot(_.deprecated.is)
+  val curryList = Curry.findAll.filterNot(_.deprecated.is).sortWith( (a,b) => {
+     if (a.price.is == b.price.is) {
+        a.name.is.compareTo(b.name.is) < 0
+     }
+     else {
+        a.price.is.compare(b.price.is) < 0
+     }
+  })
   var ta = false
   var rf = false
   var orderedFor = "";
