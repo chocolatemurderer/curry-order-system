@@ -9,7 +9,7 @@
 </head>
 <body>
 <div class="container">
-    <div class="row">
+    <div class="row xhead">
       <div class="span12">
         <h3>Raman says &quot;Order your curry!&quot;<img alt="" id="ajax-loader" style="display:none; margin-bottom: 0px; margin-left: 5px"
                                 src="/images/ajax-loader.gif"/></h3>
@@ -17,15 +17,19 @@
       Today&apos;s Order: <a href="/currentorder"><span class="count">0 orders</span></a>
     </div>
 
-      <div id="notices">
+      </div>
+    </div>
+
+    <div class="row xnotices">
+            <div id="notices" class="offset2 span8">
         <!--<div class="lift:Msgs?showAll=false"/>-->
         <lift:Msgs showAll="false">
-          <lift:error_class>error</lift:error_class>
-          <lift:warning_class>notice</lift:warning_class>
-          <lift:notice_class>success</lift:notice_class>
+          <lift:error_class>alert alert-error</lift:error_class>
+          <lift:warning_class>alert</lift:warning_class>
+          <lift:notice_class>alert alert-info</lift:notice_class>
         </lift:Msgs>
       </div>
-      </div>
+
     </div>
 
     <div class="row xbody">
