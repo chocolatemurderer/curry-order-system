@@ -1,4 +1,4 @@
-package code 
+package code
 package snippet 
 
 import scala.xml.{NodeSeq, Text}
