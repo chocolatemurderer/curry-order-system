@@ -2,3 +2,16 @@ db.driver=org.h2.Driver
 db.url=jdbc:h2:rcos;AUTO_SERVER=TRUE
 db.user=
 db.password=
+
+email.from=curry-system@localhost
+reminder.subject=REMINDER
+
+# Space separated list of recipients
+order.to=person.a@localhost person.b@localhost
+order.subject=Curry Order
+order.not-today=You cant order today.
+order.cutoff=You have missed the cutoff time.
+order.shop=Curry Place
+
+server.from=root@localhost
+server.uri=http://localhost

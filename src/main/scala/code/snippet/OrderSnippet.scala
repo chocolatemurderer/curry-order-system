@@ -71,12 +71,12 @@ class OrderSnippet {
     val calendar: Calendar = Calendar.getInstance
     if (calendar.get(Calendar.DAY_OF_WEEK) != Calendar.WEDNESDAY || calendar.get(Calendar.HOUR_OF_DAY) > 13)
     {
-      S.notice("You can only order curries on Wednesday mornings")
+      S.notice(Props.get("order.not-today").openOr("Not today!"))
       S.redirectTo("/index")
     }
     else if (calendar.get(Calendar.HOUR_OF_DAY) > 11 || (calendar.get(Calendar.HOUR_OF_DAY) == 11 && calendar.get(Calendar.MINUTE) > 28 ))
     {
-      S.notice("You have missed the cutoff time.  You will have to ring (***REMOVED***) and place your order manually")
+      S.notice(Props.get("order.cutoff").openOr("Missed cutoff time!"))
       S.redirectTo("/order")
     }
     else

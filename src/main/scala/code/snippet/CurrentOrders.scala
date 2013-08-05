@@ -26,7 +26,13 @@ class CurrentOrders {
           ".delete *" #> deleteButton (o) &
           ".order [id]" #> ("order" + o.id)
 
-  def email = ".numberSeating" #> ordersCurrent.size & ClearClearable & listCurr & listTake
+  def email = {
+    ClearClearable &
+      ".shop" #> Props.get("order.shop").openOr("") &
+      ".numberSeating" #> ordersCurrent.size &
+      listCurr &
+      listTake
+  }
 
   def deleteButton (o: Order):NodeSeq = {
       val currentUser = User.currentUser openOr null

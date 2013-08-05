@@ -66,29 +66,26 @@ class EmailTask(taskType: TaskType.Value, t: Timer) extends TimerTask
       <p>Please order by 11:30</p>
 
       <p>
-        <a href={"http://***REMOVED***"}>Place Order</a>
+        <a href={Props.get("server.uri").openOr("/")}>Place Order</a>
       </p>
     </div>
 
     val myRecips: List[String] = User.findAll().map(_.email.is)
 
-    Mailer.sendMail(From("***REMOVED***"), Subject("Wednesday curry 12:15 at ***REMOVED*** Lower Hutt (***REMOVED***)"),
+    Mailer.sendMail(From(Props.get("email.from").openOr("reminder@localhost")), Subject(Props.get("reminder.subject").openOr("Curry!")),
       (XHTMLMailBodyType(m) :: myRecips.map(To(_))): _*)
   }
 
   def createOrder()
   {
-    val emailTo = Props.mode match {
-      case Props.RunModes.Production => To("***REMOVED***") :: To("***REMOVED***") :: Nil
-      case _ => To("***REMOVED***") :: To("***REMOVED***") :: Nil
-    }
+    val emailTo: List[To] = Props.get("order.to").openOr("shop@localhost").split(' ').toList.map(To(_))
 
     TemplateFinder.findAnyTemplate("currentOrderEmail" :: Nil) match
     {
       case Full(ns) =>
         val m = (new code.snippet.CurrentOrders).email.apply(ns)
         val myRecips: List[String] = Order.findCurrent.flatMap(_.user.obj).map(_.email.is).distinct
-        Mailer.sendMail(From("***REMOVED***"), Subject("Curry Order"),
+        Mailer.sendMail(From(Props.get("email.from").openOr("order@localhost")), Subject(Props.get("order.subject").openOr("Curry Order")),
           (emailTo ::: (XHTMLMailBodyType(m) :: myRecips.map(CC(_)))): _*)
       case _ =>
     }
